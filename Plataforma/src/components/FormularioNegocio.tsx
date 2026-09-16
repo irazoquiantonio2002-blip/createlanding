@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { AnalizarAnuncio } from './AnalizarAnuncio'
 import { AreaTexto, Campo, ListaDinamica, Seccion, SelectorColor, Texto } from './campos'
 import { SubidorImagenes, SubidorLogo } from './subidores'
 import type { FormularioNegocio as Datos } from '@/lib/tipos'
@@ -96,13 +97,17 @@ export function FormularioNegocio() {
         <Campo
           etiqueta="Descripción del negocio"
           obligatorio
-          ayuda="Entre más concreto, mejor sale el texto de la página. Qué hacen, a quién le sirven, qué los distingue."
+          ayuda="Entre más concreto, mejor sale el texto de la página. Qué hacen, a quién le sirven, qué los distingue. O súbelo de un flyer del negocio: esa imagen solo se lee, no se guarda."
         >
           <AreaTexto
             valor={d.descripcion}
             cambiar={(v) => set('descripcion', v)}
             filas={5}
             placeholder="Somos una clínica dental en Culiacán con 12 años de experiencia. Atendemos urgencias el mismo día y trabajamos con todas las aseguradoras…"
+          />
+          <AnalizarAnuncio
+            hayTexto={d.descripcion.trim().length > 0}
+            onTexto={(v) => set('descripcion', v)}
           />
         </Campo>
 

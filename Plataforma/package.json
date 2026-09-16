@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.126.0",
     "@supabase/supabase-js": "^2.116.0",
     "geist": "^1.7.2",
     "lucide-react": "^1.46.0",
