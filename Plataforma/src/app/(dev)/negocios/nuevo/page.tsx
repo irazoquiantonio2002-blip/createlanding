@@ -5,8 +5,8 @@ export const metadata = { title: 'Nuevo negocio' }
 
 export default function Pagina() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-10">
-      <nav className="mb-6 text-sm">
+    <div className="mx-auto max-w-3xl">
+      <nav className="mb-6 text-[13px]">
         <Link href="/" className="text-slate-500 transition hover:text-slate-900">
           Negocios
         </Link>
@@ -15,8 +15,8 @@ export default function Pagina() {
       </nav>
 
       <header className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Nuevo negocio</h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <h1 className="text-xl font-semibold tracking-tight text-slate-900">Nuevo negocio</h1>
+        <p className="mt-1 text-[13px] text-slate-500">
           Todo lo que captures aquí es lo que va a salir en la página. Los campos marcados con{' '}
           <span className="text-rose-500">*</span> son los mínimos para poder generarla.
         </p>

@@ -3,14 +3,14 @@
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-export function LogoutButton() {
+export function BotonSalir({ a }: { a: string }) {
   const router = useRouter()
   const [saliendo, setSaliendo] = useState(false)
 
   async function salir() {
     setSaliendo(true)
-    await fetch('/api/admin/logout', { method: 'POST' })
-    router.replace('/admin/login')
+    await fetch('/api/logout', { method: 'POST' })
+    router.replace(a)
     router.refresh()
   }
 
@@ -18,7 +18,7 @@ export function LogoutButton() {
     <button
       onClick={salir}
       disabled={saliendo}
-      className="text-xs font-medium text-slate-500 transition hover:text-slate-100 disabled:opacity-40"
+      className="rounded-md px-2 py-1 text-[13px] text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 disabled:opacity-40"
     >
       Salir
     </button>

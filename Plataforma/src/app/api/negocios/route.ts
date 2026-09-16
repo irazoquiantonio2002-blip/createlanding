@@ -1,13 +1,18 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { sesionActual } from '@/lib/sesion'
 import type { Generacion, Negocio, NegocioConUltimaGeneracion } from '@/lib/tipos'
 
 // ============================================================
 //  GET  /api/negocios  -> listado con la última generación de cada uno
-//  POST /api/negocios  -> alta
+//  POST /api/negocios  -> alta (solo el rol dev, que es quien captura)
 // ============================================================
 
 export async function GET() {
+  if (!(await sesionActual())) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+  }
+
   const { data: negocios, error } = await supabase
     .from('negocios')
     .select('*')
@@ -41,6 +46,10 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  if ((await sesionActual()) !== 'dev') {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+  }
+
   const cuerpo = await req.json().catch(() => null)
   if (!cuerpo) return NextResponse.json({ error: 'JSON inválido' }, { status: 400 })
 

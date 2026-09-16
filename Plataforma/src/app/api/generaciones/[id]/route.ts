@@ -1,9 +1,14 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { sesionActual } from '@/lib/sesion'
 import type { Generacion } from '@/lib/tipos'
 
 // GET /api/generaciones/:id -> lo consulta el dashboard mientras trabaja n8n
 export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
+  if (!(await sesionActual())) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+  }
+
   const { id } = await ctx.params
 
   const { data, error } = await supabase

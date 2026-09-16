@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { sesionActual } from '@/lib/sesion'
 import { dispararGeneracion } from '@/lib/n8n'
 import { MINUTOS_ABANDONO, estaAbandonada, type Generacion, type Negocio } from '@/lib/tipos'
 
@@ -12,6 +13,10 @@ import { MINUTOS_ABANDONO, estaAbandonada, type Generacion, type Negocio } from 
 // ============================================================
 
 export async function POST(_req: Request, ctx: { params: Promise<{ id: string }> }) {
+  if ((await sesionActual()) !== 'dev') {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+  }
+
   const { id } = await ctx.params
 
   const { data: negocio, error: errNegocio } = await supabase

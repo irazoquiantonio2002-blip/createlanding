@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { EstadoBadge } from '@/components/EstadoBadge'
+import { LogoNegocio } from '@/components/LogoNegocio'
 import { PanelGeneracion } from '@/components/PanelGeneracion'
 import type { Generacion, Negocio } from '@/lib/tipos'
 
@@ -28,36 +29,27 @@ export default async function Pagina({ params }: { params: Promise<{ id: string 
   const generaciones = (generacionesRaw ?? []) as Generacion[]
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-10">
-      <nav className="mb-6 text-sm">
+    <div className="mx-auto max-w-4xl">
+      <nav className="mb-6 text-[13px]">
         <Link href="/" className="text-slate-500 transition hover:text-slate-900">
           Negocios
         </Link>
         <span className="mx-2 text-slate-300">/</span>
-        <span className="text-slate-900">{n.nombre_negocio}</span>
+        <span className="truncate text-slate-900">{n.nombre_negocio}</span>
       </nav>
 
       <header className="mb-8 flex items-center gap-4">
-        {n.logo_url ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={n.logo_url}
-            alt=""
-            className="h-14 w-14 shrink-0 rounded-xl bg-white object-contain ring-1 ring-slate-200 ring-inset"
-          />
-        ) : (
-          <span
-            className="grid h-14 w-14 shrink-0 place-items-center rounded-xl text-base font-semibold text-white"
-            style={{ background: n.color_marca ?? '#64748b' }}
-          >
-            {iniciales(n.nombre_negocio)}
-          </span>
-        )}
+        <LogoNegocio
+          nombre={n.nombre_negocio}
+          url={n.logo_url}
+          color={n.color_marca}
+          tamano="lg"
+        />
         <div className="min-w-0">
-          <h1 className="truncate text-2xl font-semibold tracking-tight text-slate-900">
+          <h1 className="truncate text-xl font-semibold tracking-tight text-slate-900">
             {n.nombre_negocio}
           </h1>
-          <p className="mt-0.5 text-sm text-slate-500">{n.giro || 'Sin giro capturado'}</p>
+          <p className="mt-0.5 text-[13px] text-slate-500">{n.giro || 'Sin giro capturado'}</p>
         </div>
       </header>
 
@@ -218,14 +210,3 @@ function Enlace({ url, texto }: { url: string; texto: string }) {
   )
 }
 
-function iniciales(nombre: string): string {
-  return (
-    nombre
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((p) => p[0])
-      .join('')
-      .toUpperCase() || 'NN'
-  )
-}
