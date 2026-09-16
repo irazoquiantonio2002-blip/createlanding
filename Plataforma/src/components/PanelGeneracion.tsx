@@ -81,11 +81,11 @@ export function PanelGeneracion({
   const estado = generacion?.estado ?? null
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+    <div className="rounded-xl border border-gris-200 bg-white p-5 shadow-sm sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h2 className="text-base font-semibold text-slate-900">Página web</h2>
-          <p className="mt-0.5 text-sm text-slate-500">
+          <h2 className="text-base font-semibold text-gris-950">Página web</h2>
+          <p className="mt-0.5 text-sm text-gris-500">
             {estado === 'desplegado'
               ? 'La página está publicada y en línea.'
               : enVuelo
@@ -165,7 +165,7 @@ export function PanelGeneracion({
           type="button"
           onClick={generar}
           disabled={disparando || enVuelo}
-          className="rounded-lg bg-marca-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-marca-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-lg bg-gris-950 px-4 py-2 text-[13px] font-medium text-white transition hover:bg-gris-800 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {disparando
             ? 'Enviando…'
@@ -181,7 +181,7 @@ export function PanelGeneracion({
             href={generacion.deployment_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+            className="rounded-lg border border-gris-300 bg-white px-4 py-2.5 text-sm font-medium text-gris-700 transition hover:bg-gris-50"
           >
             Abrir la página
           </a>

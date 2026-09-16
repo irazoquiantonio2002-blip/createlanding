@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { ArrowLeft } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { Cabecera, Contenido } from '@/components/shell/Shell'
 import { EstadoBadge } from '@/components/EstadoBadge'
 import { LogoNegocio } from '@/components/LogoNegocio'
 import { PanelGeneracion } from '@/components/PanelGeneracion'
@@ -29,35 +31,35 @@ export default async function Pagina({ params }: { params: Promise<{ id: string 
   const generaciones = (generacionesRaw ?? []) as Generacion[]
 
   return (
-    <div className="mx-auto max-w-4xl">
-      <nav className="mb-6 text-[13px]">
-        <Link href="/" className="text-slate-500 transition hover:text-slate-900">
-          Negocios
-        </Link>
-        <span className="mx-2 text-slate-300">/</span>
-        <span className="truncate text-slate-900">{n.nombre_negocio}</span>
-      </nav>
+    <>
+      <Cabecera
+        titulo={n.nombre_negocio}
+        descripcion={n.giro || 'Sin giro capturado'}
+        previo={
+          <LogoNegocio
+            nombre={n.nombre_negocio}
+            url={n.logo_url}
+            color={n.color_marca}
+            tamano="md"
+          />
+        }
+        acciones={
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-gris-200 bg-white px-3 py-1.5 text-[13px] font-medium text-gris-700 transition hover:bg-gris-50"
+          >
+            <ArrowLeft size={14} />
+            Volver
+          </Link>
+        }
+      />
 
-      <header className="mb-8 flex items-center gap-4">
-        <LogoNegocio
-          nombre={n.nombre_negocio}
-          url={n.logo_url}
-          color={n.color_marca}
-          tamano="lg"
-        />
-        <div className="min-w-0">
-          <h1 className="truncate text-xl font-semibold tracking-tight text-slate-900">
-            {n.nombre_negocio}
-          </h1>
-          <p className="mt-0.5 text-[13px] text-slate-500">{n.giro || 'Sin giro capturado'}</p>
-        </div>
-      </header>
-
-      <div className="space-y-6">
+      <Contenido>
+        <div className="mx-auto max-w-4xl space-y-5">
         <PanelGeneracion negocioId={n.id} inicial={generaciones[0] ?? null} />
 
-        <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-          <h2 className="mb-5 border-b border-slate-100 pb-4 text-base font-semibold text-slate-900">
+        <section className="rounded-xl border border-gris-200 bg-white p-5">
+          <h2 className="mb-5 border-b border-gris-100 pb-4 text-[14px] font-semibold text-gris-950">
             Información del negocio
           </h2>
 
@@ -72,7 +74,7 @@ export default async function Pagina({ params }: { params: Promise<{ id: string 
                   {n.servicios.map((s) => (
                     <li
                       key={s}
-                      className="rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700"
+                      className="rounded-md bg-gris-100 px-2 py-1 text-xs font-medium text-gris-700"
                     >
                       {s}
                     </li>
@@ -85,13 +87,13 @@ export default async function Pagina({ params }: { params: Promise<{ id: string 
               {n.color_marca ? (
                 <span className="inline-flex items-center gap-2">
                   <span
-                    className="h-4 w-4 rounded ring-1 ring-slate-300 ring-inset"
+                    className="h-4 w-4 rounded ring-1 ring-gris-300 ring-inset"
                     style={{ background: n.color_marca }}
                   />
                   <span className="font-mono text-xs">{n.color_marca}</span>
                 </span>
               ) : (
-                <span className="text-slate-400">Lo deduce la IA del logo</span>
+                <span className="text-gris-400">Lo deduce la IA del logo</span>
               )}
             </Dato>
 
@@ -130,13 +132,13 @@ export default async function Pagina({ params }: { params: Promise<{ id: string 
 
             <Dato etiqueta={`Imágenes (${n.imagenes.length})`}>
               {n.imagenes.length === 0 ? (
-                <span className="text-slate-400">Ninguna. La página usará fotos de banco.</span>
+                <span className="text-gris-400">Ninguna. La página usará fotos de banco.</span>
               ) : (
                 <ul className="grid grid-cols-4 gap-2 sm:grid-cols-6">
                   {n.imagenes.map((img) => (
                     <li
                       key={img.path}
-                      className="aspect-square overflow-hidden rounded-lg border border-slate-200 bg-slate-50"
+                      className="aspect-square overflow-hidden rounded-lg border border-gris-200 bg-gris-50"
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={img.url} alt={img.nombre} className="h-full w-full object-cover" />
@@ -149,15 +151,15 @@ export default async function Pagina({ params }: { params: Promise<{ id: string 
         </section>
 
         {generaciones.length > 1 && (
-          <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-            <h2 className="mb-4 border-b border-slate-100 pb-4 text-base font-semibold text-slate-900">
+          <section className="rounded-xl border border-gris-200 bg-white p-5">
+            <h2 className="mb-4 border-b border-gris-100 pb-4 text-[14px] font-semibold text-gris-950">
               Intentos anteriores
             </h2>
-            <ul className="divide-y divide-slate-100">
+            <ul className="divide-y divide-gris-100">
               {generaciones.slice(1).map((g) => (
                 <li key={g.id} className="flex flex-wrap items-center gap-3 py-3 text-sm">
                   <EstadoBadge estado={g.estado} />
-                  <span className="text-slate-500">
+                  <span className="text-gris-500">
                     {new Date(g.creado_en).toLocaleString('es-MX', {
                       dateStyle: 'medium',
                       timeStyle: 'short',
@@ -168,7 +170,7 @@ export default async function Pagina({ params }: { params: Promise<{ id: string 
                       href={g.deployment_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="ml-auto text-marca-600 hover:underline"
+                      className="ml-auto text-azul-600 hover:underline"
                     >
                       Abrir
                     </a>
@@ -183,16 +185,17 @@ export default async function Pagina({ params }: { params: Promise<{ id: string 
             </ul>
           </section>
         )}
-      </div>
-    </div>
+        </div>
+      </Contenido>
+    </>
   )
 }
 
 function Dato({ etiqueta, children }: { etiqueta: string; children: React.ReactNode }) {
   return (
     <div className="grid gap-1 sm:grid-cols-[11rem_1fr] sm:gap-4">
-      <dt className="text-sm font-medium text-slate-500">{etiqueta}</dt>
-      <dd className="min-w-0 text-sm text-slate-800">{children}</dd>
+      <dt className="text-sm font-medium text-gris-500">{etiqueta}</dt>
+      <dd className="min-w-0 text-sm text-gris-800">{children}</dd>
     </div>
   )
 }
@@ -203,7 +206,7 @@ function Enlace({ url, texto }: { url: string; texto: string }) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-marca-600 hover:underline"
+      className="text-azul-600 hover:underline"
     >
       {texto}
     </a>

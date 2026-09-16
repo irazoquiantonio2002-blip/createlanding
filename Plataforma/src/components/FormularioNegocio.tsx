@@ -219,9 +219,9 @@ export function FormularioNegocio() {
         </div>
       )}
 
-      <div className="sticky bottom-0 -mx-4 flex flex-wrap items-center justify-end gap-3 border-t border-slate-200 bg-white/90 px-4 py-4 backdrop-blur sm:mx-0 sm:rounded-xl sm:border sm:px-5">
+      <div className="sticky bottom-0 -mx-4 flex flex-wrap items-center justify-end gap-3 border-t border-gris-200 bg-white/90 px-4 py-4 backdrop-blur sm:mx-0 sm:rounded-xl sm:border sm:px-5">
         {!listo && (
-          <p className="mr-auto text-xs text-slate-500">
+          <p className="mr-auto text-xs text-gris-500">
             Faltan nombre, descripción y WhatsApp.
           </p>
         )}
@@ -229,14 +229,14 @@ export function FormularioNegocio() {
           type="button"
           disabled={!listo || enviando !== null}
           onClick={() => enviar('guardar')}
-          className="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-lg border border-gris-300 bg-white px-4 py-2.5 text-sm font-medium text-gris-700 transition hover:bg-gris-50 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {enviando === 'guardar' ? 'Guardando…' : 'Solo guardar'}
         </button>
         <button
           type="submit"
           disabled={!listo || enviando !== null}
-          className="rounded-lg bg-marca-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-marca-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-lg bg-gris-950 px-4 py-2 text-[13px] font-medium text-white transition hover:bg-gris-800 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {enviando === 'generar' ? 'Enviando a n8n…' : 'Generar página web'}
         </button>

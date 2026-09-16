@@ -25,7 +25,7 @@ export function LogoNegocio({
       <img
         src={url}
         alt=""
-        className={`${clase} shrink-0 bg-white object-contain ring-1 ring-slate-200 ring-inset`}
+        className={`${clase} shrink-0 bg-white object-contain ring-1 ring-gris-200 ring-inset`}
       />
     )
   }

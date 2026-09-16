@@ -1,17 +1,36 @@
 @import "tailwindcss";
 
 @theme {
-  --color-marca-50:  #eef2ff;
-  --color-marca-100: #e0e7ff;
-  --color-marca-200: #c7d2fe;
-  --color-marca-300: #a5b4fc;
-  --color-marca-400: #818cf8;
-  --color-marca-500: #6366f1;
-  --color-marca-600: #4f46e5;
-  --color-marca-700: #4338ca;
-  --color-marca-900: #312e81;
+  /* Escala de grises al estilo Geist: casi toda la interfaz vive aquí. */
+  --color-gris-50:  #fafafa;
+  --color-gris-100: #f2f2f2;
+  --color-gris-200: #ebebeb;
+  --color-gris-300: #e1e1e1;
+  --color-gris-400: #a1a1a1;
+  --color-gris-500: #8f8f8f;
+  --color-gris-600: #666666;
+  --color-gris-700: #4d4d4d;
+  --color-gris-800: #333333;
+  --color-gris-900: #1a1a1a;
+  --color-gris-950: #0a0a0a;
 
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --color-azul-100: #e5f0ff;
+  --color-azul-600: #0072f5;
+  --color-azul-700: #0062d1;
+
+  --color-verde-100: #e4f7e9;
+  --color-verde-600: #45a557;
+  --color-verde-700: #34774a;
+
+  --color-ambar-100: #fff5d6;
+  --color-ambar-600: #ab6e00;
+
+  --color-rojo-100: #ffe7e7;
+  --color-rojo-600: #e5484d;
+  --color-rojo-700: #cd2b31;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 html, body {
@@ -19,8 +38,8 @@ html, body {
 }
 
 body {
-  background: #fafafa;
-  color: #0f172a;
+  background: #ffffff;
+  color: var(--color-gris-950);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -30,3 +49,11 @@ body {
   50%      { opacity: .35; }
 }
 .late { animation: latido 1.4s ease-in-out infinite; }
+
+/* Modales: entran con un fundido corto, sin rebotes. */
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(4px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+dialog[open] { animation: aparecer .14s ease-out; }
+dialog::backdrop { background: rgb(0 0 0 / .45); }

@@ -9,8 +9,8 @@ import { useId } from 'react'
 // ============================================================
 
 const ENTRADA =
-  'w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 ' +
-  'placeholder:text-slate-400 focus:border-marca-500 focus:ring-2 focus:ring-marca-500/20 focus:outline-none'
+  'w-full rounded-lg border border-gris-300 bg-white px-3 py-2 text-sm text-gris-950 ' +
+  'placeholder:text-gris-400 focus:border-gris-400 focus:ring-2 focus:ring-gris-200 focus:outline-none'
 
 export function Campo({
   etiqueta,
@@ -25,12 +25,12 @@ export function Campo({
 }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-sm font-medium text-slate-800">
+      <span className="mb-1.5 block text-sm font-medium text-gris-800">
         {etiqueta}
         {obligatorio && <span className="ml-0.5 text-rose-500">*</span>}
       </span>
       {children}
-      {ayuda && <span className="mt-1.5 block text-xs text-slate-500">{ayuda}</span>}
+      {ayuda && <span className="mt-1.5 block text-xs text-gris-500">{ayuda}</span>}
     </label>
   )
 }
@@ -115,7 +115,7 @@ export function ListaDinamica({
             onClick={() => quitar(i)}
             disabled={filas.length === 1 && !v}
             aria-label="Quitar este renglón"
-            className="shrink-0 rounded-lg border border-slate-300 px-3 text-sm text-slate-500 transition hover:border-rose-300 hover:bg-rose-50 hover:text-rose-600 disabled:cursor-not-allowed disabled:opacity-40"
+            className="shrink-0 rounded-lg border border-gris-300 px-3 text-sm text-gris-500 transition hover:border-rose-300 hover:bg-rose-50 hover:text-rose-600 disabled:cursor-not-allowed disabled:opacity-40"
           >
             ×
           </button>
@@ -124,7 +124,7 @@ export function ListaDinamica({
       <button
         type="button"
         onClick={() => cambiar([...filas, ''])}
-        className="text-sm font-medium text-marca-600 transition hover:text-marca-700"
+        className="text-sm font-medium text-gris-950 underline-offset-2 transition hover:underline"
       >
         + {textoAgregar}
       </button>
@@ -165,7 +165,7 @@ export function SelectorColor({
             type="color"
             value={/^#[0-9a-fA-F]{6}$/.test(valor) ? valor : '#4f46e5'}
             onChange={(e) => cambiar(e.target.value)}
-            className="h-10 w-14 cursor-pointer rounded-lg border border-slate-300 bg-white p-1"
+            className="h-10 w-14 cursor-pointer rounded-lg border border-gris-300 bg-white p-1"
           />
           <input
             className={`${ENTRADA} max-w-[10rem] font-mono`}
@@ -173,7 +173,7 @@ export function SelectorColor({
             placeholder="#4f46e5"
             onChange={(e) => cambiar(e.target.value)}
           />
-          <span className="text-xs text-slate-500">
+          <span className="text-xs text-gris-500">
             De este color sale la paleta completa de la página.
           </span>
         </div>
@@ -198,8 +198,8 @@ function Opcion({
       className={
         'rounded-lg border px-3 py-2 text-sm font-medium transition ' +
         (activa
-          ? 'border-marca-500 bg-marca-50 text-marca-700'
-          : 'border-slate-300 bg-white text-slate-600 hover:bg-slate-50')
+          ? 'border-gris-950 bg-gris-50 text-gris-950'
+          : 'border-gris-300 bg-white text-gris-600 hover:bg-gris-50')
       }
     >
       {children}
@@ -217,10 +217,10 @@ export function Seccion({
   children: React.ReactNode
 }) {
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-      <div className="mb-5 border-b border-slate-100 pb-4">
-        <h2 className="text-base font-semibold text-slate-900">{titulo}</h2>
-        <p className="mt-0.5 text-sm text-slate-500">{descripcion}</p>
+    <section className="rounded-xl border border-gris-200 bg-white p-5 shadow-sm sm:p-6">
+      <div className="mb-5 border-b border-gris-100 pb-4">
+        <h2 className="text-base font-semibold text-gris-950">{titulo}</h2>
+        <p className="mt-0.5 text-sm text-gris-500">{descripcion}</p>
       </div>
       <div className="space-y-5">{children}</div>
     </section>
