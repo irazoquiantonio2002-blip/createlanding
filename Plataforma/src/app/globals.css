@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  --color-marca-50:  #eef2ff;
+  --color-marca-100: #e0e7ff;
+  --color-marca-200: #c7d2fe;
+  --color-marca-300: #a5b4fc;
+  --color-marca-400: #818cf8;
+  --color-marca-500: #6366f1;
+  --color-marca-600: #4f46e5;
+  --color-marca-700: #4338ca;
+  --color-marca-900: #312e81;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background: #f6f7f9;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* El puntito que late mientras n8n trabaja. */
+@keyframes latido {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .35; }
+}
+.late { animation: latido 1.4s ease-in-out infinite; }

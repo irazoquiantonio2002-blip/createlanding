@@ -1,0 +1,29 @@
+node_modules/
+.next/
+out/
+build/
+
+# variables de entorno: nunca secretos en el repo, solo la plantilla
+.env*
+!.env.example
+
+# credenciales sueltas
+CLAVES SUPABASE.txt
+
+# vercel (queda al hacer `vercel link` o `vercel env pull`)
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# editor / SO
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+*.pem
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
