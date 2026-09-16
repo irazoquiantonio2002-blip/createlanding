@@ -33,10 +33,14 @@ export async function cargarResumen(): Promise<Resumen> {
   if (error) return { ...vacio, error: error.message }
 
   const negocios = (negociosRaw ?? []) as Negocio[]
-  const ultima = await ultimaGeneracionPorNegocio(negocios.map((n) => n.id))
+  const { ultima, ultimaPublicada } = await generacionesPorNegocio(negocios.map((n) => n.id))
 
   const filas: ProyectoFila[] = negocios.map((n) => {
     const g = ultima.get(n.id) ?? null
+    // Los enlaces salen de la última generación PUBLICADA, no de la última a
+    // secas: un reintento fallido encima de una página viva dejaba la fila sin
+    // repo ni URL, como si el sitio no existiera.
+    const viva = ultimaPublicada.get(n.id) ?? null
     return {
       id: n.id,
       nombre: n.nombre_negocio,
@@ -46,8 +50,8 @@ export async function cargarResumen(): Promise<Resumen> {
       color: n.color_marca,
       creadoEn: n.creado_en,
       estado: g?.estado ?? null,
-      repoUrl: g?.repo_url ?? null,
-      deploymentUrl: g?.deployment_url ?? null,
+      repoUrl: viva?.repo_url ?? null,
+      deploymentUrl: viva?.deployment_url ?? null,
     }
   })
 
@@ -56,16 +60,22 @@ export async function cargarResumen(): Promise<Resumen> {
   return {
     filas,
     total: negocios.length,
-    publicadas: vistas.filter((g) => g.estado === 'desplegado').length,
+    // "Publicadas" cuenta negocios con página viva, aunque el último intento
+    // haya fallado: la página anterior sigue en línea.
+    publicadas: ultimaPublicada.size,
     enCurso: vistas.filter((g) => g.estado === 'encolado' || g.estado === 'generando').length,
     conError: vistas.filter((g) => g.estado === 'error').length,
     error: null,
   }
 }
 
-async function ultimaGeneracionPorNegocio(ids: string[]): Promise<Map<string, Generacion>> {
+async function generacionesPorNegocio(ids: string[]): Promise<{
+  ultima: Map<string, Generacion>
+  ultimaPublicada: Map<string, Generacion>
+}> {
   const ultima = new Map<string, Generacion>()
-  if (!ids.length) return ultima
+  const ultimaPublicada = new Map<string, Generacion>()
+  if (!ids.length) return { ultima, ultimaPublicada }
 
   const { data } = await supabase
     .from('sitio_generaciones')
@@ -76,8 +86,11 @@ async function ultimaGeneracionPorNegocio(ids: string[]): Promise<Map<string, Ge
   // Llegan de la más nueva a la más vieja: la primera de cada negocio manda.
   for (const g of (data ?? []) as Generacion[]) {
     if (!ultima.has(g.negocio_id)) ultima.set(g.negocio_id, g)
+    if (g.estado === 'desplegado' && g.deployment_url && !ultimaPublicada.has(g.negocio_id)) {
+      ultimaPublicada.set(g.negocio_id, g)
+    }
   }
-  return ultima
+  return { ultima, ultimaPublicada }
 }
 
 export type UsoCarpeta = {
