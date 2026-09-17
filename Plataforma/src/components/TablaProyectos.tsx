@@ -350,6 +350,11 @@ function ModalDetalle({ id, onCerrar }: { id: string | null; onCerrar: () => voi
             )}
           </Campo>
 
+          <CambiarDominio
+            negocioId={datos.negocio.id}
+            publicada={datos.generaciones.find((g) => g.estado === 'desplegado' && g.deployment_url) ?? null}
+          />
+
           <div>
             <p className="mb-1.5 text-[11px] font-medium text-gris-500">
               Historial de generaciones ({datos.generaciones.length})
@@ -538,4 +543,140 @@ function fechaCorta(iso: string): string {
 
 function fechaLarga(iso: string): string {
   return new Date(iso).toLocaleString('es-MX', { dateStyle: 'medium', timeStyle: 'short' })
+}
+
+// ---------- cambiar el dominio de la pagina publicada ----------
+
+function CambiarDominio({
+  negocioId,
+  publicada,
+}: {
+  negocioId: string
+  publicada: Generacion | null
+}) {
+  const router = useRouter()
+  const actual = publicada?.deployment_url ? host(publicada.deployment_url) : ''
+  const [nombre, setNombre] = useState(actual.replace(/\.vercel\.app$/i, ''))
+  const [estado, setEstado] = useState<{ libre: boolean; motivo?: string } | null>(null)
+  const [comprobando, setComprobando] = useState(false)
+  const [aplicando, setAplicando] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [hecho, setHecho] = useState<string | null>(null)
+
+  if (!publicada) {
+    return (
+      <div className="rounded-lg border border-gris-200 bg-gris-50 px-3 py-2.5">
+        <p className="text-[11px] font-medium text-gris-500">Dominio</p>
+        <p className="mt-1 text-[13px] text-gris-600">
+          Se puede cambiar cuando la página esté publicada.
+        </p>
+      </div>
+    )
+  }
+
+  const sinCambio = nombre.trim().toLowerCase() === actual.replace(/\.vercel\.app$/i, '')
+
+  async function comprobar() {
+    setComprobando(true)
+    setError(null)
+    setEstado(null)
+
+    const res = await fetch(
+      `/api/negocios/${negocioId}/dominio?nombre=${encodeURIComponent(nombre.trim().toLowerCase())}`,
+    )
+    const body = await res.json().catch(() => null)
+    setComprobando(false)
+
+    if (!res.ok) {
+      setError(body?.error ?? 'No se pudo comprobar')
+      return
+    }
+    setEstado(body)
+  }
+
+  async function aplicar() {
+    setAplicando(true)
+    setError(null)
+
+    const res = await fetch(`/api/negocios/${negocioId}/dominio`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre: nombre.trim().toLowerCase() }),
+    })
+    const body = await res.json().catch(() => null)
+    setAplicando(false)
+
+    if (!res.ok) {
+      setError(body?.error ?? 'No se pudo cambiar el dominio')
+      return
+    }
+    setHecho(body.deployment_url)
+    setEstado(null)
+    router.refresh()
+  }
+
+  return (
+    <div className="rounded-lg border border-gris-200 px-3 py-2.5">
+      <p className="text-[11px] font-medium text-gris-500">Dominio</p>
+
+      <p className="mt-1 font-mono text-[12px] text-gris-600">
+        {hecho ? host(hecho) : actual}
+      </p>
+
+      <div className="mt-2 flex items-center gap-1.5">
+        <input
+          value={nombre}
+          onChange={(e) => {
+            setNombre(e.target.value)
+            setEstado(null)
+            setError(null)
+            setHecho(null)
+          }}
+          spellCheck={false}
+          className="min-w-0 flex-1 rounded-md border border-gris-200 px-2 py-1.5 font-mono text-[12px] text-gris-950 outline-none transition focus:border-gris-400"
+        />
+        <span className="shrink-0 font-mono text-[12px] text-gris-500">.vercel.app</span>
+      </div>
+
+      <div className="mt-2 flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={comprobar}
+          disabled={comprobando || aplicando || !nombre.trim() || sinCambio}
+          className="rounded-md border border-gris-200 bg-white px-2.5 py-1 text-[12px] font-medium text-gris-700 transition hover:bg-gris-50 disabled:opacity-40"
+        >
+          {comprobando ? 'Comprobando…' : 'Comprobar si está libre'}
+        </button>
+
+        {estado?.libre && (
+          <button
+            type="button"
+            onClick={aplicar}
+            disabled={aplicando}
+            className="rounded-md bg-gris-950 px-2.5 py-1 text-[12px] font-medium text-white transition hover:bg-gris-800 disabled:opacity-40"
+          >
+            {aplicando ? 'Cambiando…' : 'Cambiar dominio'}
+          </button>
+        )}
+      </div>
+
+      {estado && (
+        <p
+          className={`mt-2 text-[12px] ${estado.libre ? 'text-verde-700' : 'text-rojo-700'}`}
+        >
+          {estado.libre
+            ? `${nombre.trim().toLowerCase()}.vercel.app está libre. Al cambiarlo, la dirección anterior deja de responder.`
+            : estado.motivo}
+        </p>
+      )}
+
+      {hecho && (
+        <p className="mt-2 text-[12px] text-verde-700">
+          Listo, la página quedó en {host(hecho)}
+        </p>
+      )}
+
+      {error && <p className="mt-2 text-[12px] text-rojo-700">{error}</p>}
+    </div>
+  )
 }
